@@ -1,4 +1,4 @@
-package com.example.vseremet.crud_sqlte;
+package com.example.vseremet.crud_sqlte.EventHandlers;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -7,6 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.example.vseremet.crud_sqlte.Activities.MainActivity;
+import com.example.vseremet.crud_sqlte.Models.ObjectStudent;
+import com.example.vseremet.crud_sqlte.R;
+import com.example.vseremet.crud_sqlte.Persistance.TableControllerStudent;
 
 public class OnLongClickListenerStudentRecord implements View.OnLongClickListener {
 

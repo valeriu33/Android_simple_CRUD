@@ -1,9 +1,11 @@
-package com.example.vseremet.crud_sqlte;
+package com.example.vseremet.crud_sqlte.Persistance;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
+import com.example.vseremet.crud_sqlte.Models.ObjectStudent;
 
 import java.util.ArrayList;
 import java.util.List;

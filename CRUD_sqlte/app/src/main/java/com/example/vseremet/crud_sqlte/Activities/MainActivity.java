@@ -1,11 +1,16 @@
-package com.example.vseremet.crud_sqlte;
+package com.example.vseremet.crud_sqlte.Activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.example.vseremet.crud_sqlte.Models.ObjectStudent;
+import com.example.vseremet.crud_sqlte.EventHandlers.OnClickListenerCreateStudent;
+import com.example.vseremet.crud_sqlte.EventHandlers.OnLongClickListenerStudentRecord;
+import com.example.vseremet.crud_sqlte.R;
+import com.example.vseremet.crud_sqlte.Persistance.TableControllerStudent;
 
 import java.util.List;
 

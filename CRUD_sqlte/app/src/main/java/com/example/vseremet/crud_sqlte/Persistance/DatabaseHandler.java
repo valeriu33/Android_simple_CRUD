@@ -1,4 +1,4 @@
-package com.example.vseremet.crud_sqlte;
+package com.example.vseremet.crud_sqlte.Persistance;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
