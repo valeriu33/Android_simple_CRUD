@@ -48,9 +48,9 @@ public class MainActivity extends AppCompatActivity {
 
             for (ObjectStudent obj : students) {
 
-                int id = obj.id;
-                String studentFirstname = obj.firstName;
-                String studentEmail = obj.email;
+                int id = obj.getId();
+                String studentFirstname = obj.getUserName();
+                String studentEmail = obj.getEmail();
 
                 String textViewContents = studentFirstname + " - " + studentEmail;
 

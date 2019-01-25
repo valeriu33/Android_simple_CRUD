@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -67,35 +68,60 @@ public class OnLongClickListenerStudentRecord implements View.OnLongClickListene
         final EditText studentFirstnameET = (EditText) formElementsView.findViewById(R.id.studentFirstnameET);
         final EditText studentEmailET = (EditText) formElementsView.findViewById(R.id.studentEmailET);
 
-        studentFirstnameET.setText(objectStudent.firstName);
-        studentEmailET.setText(objectStudent.email);
+        studentFirstnameET.setText(objectStudent.getUserName());
+        studentEmailET.setText(objectStudent.getEmail());
 
-        new AlertDialog.Builder(context)
+        final AlertDialog dialog = new AlertDialog.Builder(context)
                 .setView(formElementsView)
                 .setTitle("Edit Record")
-                .setPositiveButton("Save Changes",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
+                .setPositiveButton("Save Changes", null)
+                .setNegativeButton("Cancel", null)
+                .create();
+
+        dialog.setOnShowListener(
+                new DialogInterface.OnShowListener() {
+
+                    @Override
+                    public void onShow(DialogInterface dialogInterface) {
+
+                        Button okButton = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                        okButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                boolean updateSuccessful = true;
 
                                 ObjectStudent objectStudent = new ObjectStudent();
-                                objectStudent.id = studentId;
-                                objectStudent.firstName = studentFirstnameET.getText().toString();
-                                objectStudent.email = studentEmailET.getText().toString();
 
-                                boolean updateSuccessful = tableControllerStudent.update(objectStudent);
+                                String userName = studentFirstnameET.getText().toString();
+                                String email = studentFirstnameET.getText().toString();
 
-                                if(updateSuccessful){
-                                    Toast.makeText(context, "Student record was updated.", Toast.LENGTH_SHORT).show();
-                                }else{
-                                    Toast.makeText(context, "Unable to update student record.", Toast.LENGTH_SHORT).show();
+                                objectStudent.setId(studentId);
+
+                                if (!objectStudent.trySetUserName(userName)) {
+                                    Toast.makeText(context, "Username is too short.", Toast.LENGTH_SHORT).show();
+                                    updateSuccessful = false;
                                 }
 
-                                ((MainActivity) context).countRecords();
-                                ((MainActivity) context).readRecords();
+                                if (!objectStudent.trySetEmail(email)) {
+                                    Toast.makeText(context, "This is not a valid email", Toast.LENGTH_SHORT).show();
+                                    updateSuccessful = false;
+                                }
 
-                                dialog.cancel();
+                                if (!tableControllerStudent.update(objectStudent)) {
+                                    Toast.makeText(context, "Unable to update student record.", Toast.LENGTH_SHORT).show();
+                                    updateSuccessful = false;
+                                }
+
+                                if (updateSuccessful) {
+                                    Toast.makeText(context, "Student record was updated.", Toast.LENGTH_SHORT).show();
+                                    ((MainActivity) context).countRecords();
+                                    ((MainActivity) context).readRecords();
+                                }
+
+                                dialog.dismiss();
                             }
-
-                        }).show();
+                        });
+                    }
+                });
     }
 }

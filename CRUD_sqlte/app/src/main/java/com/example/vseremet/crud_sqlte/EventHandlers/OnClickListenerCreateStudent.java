@@ -3,8 +3,10 @@ package com.example.vseremet.crud_sqlte.EventHandlers;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.preference.Preference;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -24,30 +26,69 @@ public class OnClickListenerCreateStudent implements View.OnClickListener {
         final EditText studentFirstnameET = (EditText) formElementsView.findViewById(R.id.studentFirstnameET);
         final EditText studentEmailET = (EditText) formElementsView.findViewById(R.id.studentEmailET);
 
-        new AlertDialog.Builder(rootContext)
+
+
+        final AlertDialog dialog = new AlertDialog.Builder(rootContext)
                 .setView(formElementsView)
                 .setTitle("Create Student")
-                .setPositiveButton("Add",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                ObjectStudent objectStudent = new ObjectStudent();
-                                objectStudent.firstName = studentFirstnameET.getText().toString();
-                                objectStudent.email = studentEmailET.getText().toString();
+//                .setNegativeButton("Cancel", null)
+                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
-                                boolean createSuccessful = new TableControllerStudent(rootContext).create(objectStudent);
+                    }
+                })
+                .create();
 
-                                if(createSuccessful){
-                                    Toast.makeText(rootContext, "Student \"" + objectStudent.firstName + "\" was saved in the DataBase.", Toast.LENGTH_SHORT).show();
-                                }else{
-                                    Toast.makeText(rootContext, "Unable to save student information.", Toast.LENGTH_SHORT).show();
-                                }
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                Button button = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        boolean createSuccessful = true;
 
-                                ((MainActivity) rootContext).countRecords();
-                                ((MainActivity) rootContext).readRecords();
+                        String userName = studentFirstnameET.getText().toString();
+                        String email = studentEmailET.getText().toString();
 
-                                dialog.cancel();
+                        ObjectStudent objectStudent = new ObjectStudent();
+                        if (!objectStudent.trySetUserName(userName)) {
+                            Toast.makeText(rootContext, "Username is too short.", Toast.LENGTH_SHORT).show();
+                            createSuccessful = false;
+                        }
+
+                        if (!objectStudent.trySetEmail(email)) {
+                            Toast.makeText(rootContext, "This is not a valid email", Toast.LENGTH_SHORT).show();
+                            createSuccessful = false;
+                        }
+
+//                                if(!objectStudent.trySetUserName(password)){
+//                                    Toast.makeText(rootContext, "Password must have at least: six of more " +
+//                                            "characters, one uppercase letter, one lowercase letter and one number", Toast.LENGTH_LONG).show();
+//                                }
+
+                        if (createSuccessful) {
+                            if (!(new TableControllerStudent(rootContext).create(objectStudent))) {
+                                Toast.makeText(rootContext, "Unable to save student information.", Toast.LENGTH_SHORT).show();
+                                createSuccessful = false;
                             }
+                        }
 
-                        }).show();
+                        if (createSuccessful) {
+                            Toast.makeText(rootContext, "Student \"" + objectStudent.getUserName()
+                                    + "\" was saved in the DataBase.", Toast.LENGTH_SHORT).show();
+
+                            ((MainActivity) rootContext).countRecords();
+                            ((MainActivity) rootContext).readRecords();
+
+                            dialog.dismiss();
+                        }
+                    }
+                });
+            }
+
+        });
+        dialog.show();
     }
 }

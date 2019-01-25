@@ -3,6 +3,7 @@ package com.example.vseremet.crud_sqlte.Persistance;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteCursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.vseremet.crud_sqlte.Models.ObjectStudent;
@@ -19,8 +20,8 @@ public class TableControllerStudent extends DatabaseHandler {
 
         ContentValues values = new ContentValues();
 
-        values.put("firstname", objectStudent.firstName);
-        values.put("email", objectStudent.email);
+        values.put("firstname", objectStudent.getUserName());
+        values.put("email", objectStudent.getEmail());
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -49,6 +50,7 @@ public class TableControllerStudent extends DatabaseHandler {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(sql, null);
 
+
         if (cursor.moveToFirst()) {
             do {
 
@@ -57,9 +59,12 @@ public class TableControllerStudent extends DatabaseHandler {
                 String studentEmail = cursor.getString(cursor.getColumnIndex("email"));
 
                 ObjectStudent objectStudent = new ObjectStudent();
-                objectStudent.id = id;
-                objectStudent.firstName = studentFirstName;
+                objectStudent.setId(id);
+//                objectStudent.trySetUserName(studentFirstName);
+//                objectStudent.trySetEmail(studentEmail);
+                objectStudent.userName = studentFirstName;
                 objectStudent.email = studentEmail;
+
 
                 recordsList.add(objectStudent);
 
@@ -89,9 +94,9 @@ public class TableControllerStudent extends DatabaseHandler {
             String email = cursor.getString(cursor.getColumnIndex("email"));
 
             objectStudent = new ObjectStudent();
-            objectStudent.id = id;
-            objectStudent.firstName = firstname;
-            objectStudent.email = email;
+            objectStudent.setId(id);
+            objectStudent.trySetUserName(firstname);
+            objectStudent.trySetEmail(email);
 
         }
 
@@ -106,12 +111,12 @@ public class TableControllerStudent extends DatabaseHandler {
 
         ContentValues values = new ContentValues();
 
-        values.put("firstname", objectStudent.firstName);
-        values.put("email", objectStudent.email);
+        values.put("firstname", objectStudent.getUserName());
+        values.put("email", objectStudent.getEmail());
 
         String where = "id = ?";
 
-        String[] whereArgs = { Integer.toString(objectStudent.id) };
+        String[] whereArgs = { Integer.toString(objectStudent.getId()) };
 
         SQLiteDatabase db = this.getWritableDatabase();
 
