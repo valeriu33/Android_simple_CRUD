@@ -1,7 +1,7 @@
 package com.example.vseremet.crud_sqlte.Models;
 
 public class ObjectStudent {
-    private int id;
+    public int id;
     public String userName;
     public String email;
     public String password;

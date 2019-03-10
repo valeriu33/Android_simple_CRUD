@@ -3,12 +3,10 @@ package com.example.vseremet.crud_sqlte.Persistance;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteCursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.vseremet.crud_sqlte.Models.ObjectStudent;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class TableControllerStudent extends DatabaseHandler {
@@ -28,6 +26,8 @@ public class TableControllerStudent extends DatabaseHandler {
         boolean createSuccessful = db.insert("students", null, values) > 0;
         db.close();
 
+
+
         return createSuccessful;
     }
 
@@ -42,39 +42,7 @@ public class TableControllerStudent extends DatabaseHandler {
     }
 
     public List<ObjectStudent> read() {
-
-        List<ObjectStudent> recordsList = new ArrayList<ObjectStudent>();
-
-        String sql = "SELECT * FROM students ORDER BY id DESC";
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(sql, null);
-
-
-        if (cursor.moveToFirst()) {
-            do {
-
-                int id = Integer.parseInt(cursor.getString(cursor.getColumnIndex("id")));
-                String studentFirstName = cursor.getString(cursor.getColumnIndex("firstname"));
-                String studentEmail = cursor.getString(cursor.getColumnIndex("email"));
-
-                ObjectStudent objectStudent = new ObjectStudent();
-                objectStudent.setId(id);
-//                objectStudent.trySetUserName(studentFirstName);
-//                objectStudent.trySetEmail(studentEmail);
-                objectStudent.userName = studentFirstName;
-                objectStudent.email = studentEmail;
-
-
-                recordsList.add(objectStudent);
-
-            } while (cursor.moveToNext());
-        }
-
-        cursor.close();
-        db.close();
-
-        return recordsList;
+        return null;
     }
 
     public ObjectStudent readSingleRecord(int studentId) {
